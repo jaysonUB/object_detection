@@ -33,7 +33,7 @@ def video_to_images(video):
     success, image = cap.read()
     count = 0
     while success:
-        cv2.imwrite(os.path.join(STATIC_FOLDER, f'frame{count}.jpg'), image)  # save frame as JPEG file
+        cv2.imwrite(os.path.join(FRAMES_FOLDER, f'frame{count}.jpg'), image)  # save frame as JPEG file
         success, image = cap.read()
         if not success:
             print('Done')

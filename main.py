@@ -1,8 +1,8 @@
 import os
 from flask import Flask, flash, request, redirect, render_template
 from werkzeug.utils import secure_filename
-from detection import *
-from tensorflow.keras.models import Sequential, load_model
+#from detection import *
+#from tensorflow.keras.models import Sequential, load_model
 
 app = Flask(__name__)
 
@@ -58,9 +58,9 @@ def upload_file():
 
     flash('File(s) successfully uploaded')
 
-    video_to_images(video)
-    search(list, item)
-    detect_objects(folder)
+    #video_to_images(video)
+    #search(list, item)
+    #detect_objects(folder)
 
     return redirect('/')
 
