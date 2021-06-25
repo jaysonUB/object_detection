@@ -23,9 +23,10 @@ if not os.path.isdir(FRAMES_FOLDER):
 
 # loading the weights
 #model.load_weights('/home/rants/PycharmProjects/kbs-project/models/object_detection.h5')
+from glob import  glob
 model =VGG16()
 objects = []
-locations = []
+locations = glob('static/frames/*.jpg')
 
 # taking in my video input function
 def video_to_images(video):
@@ -38,6 +39,7 @@ def video_to_images(video):
         if not success:
             print('Done')
         count += 1
+    feeding_frames_to_vgg16(locations)
 
 
 def search(list, item):
@@ -46,44 +48,27 @@ def search(list, item):
             return True
     return False
 
-
-def detect_objects(folder):
-    count = 0
-    for file in os.listdir(folder):
-        if count <= 10:
-            full_path = 'static/frames/' + file
-            image = load_img(full_path, target_size=(224, 224))
-            image = img_to_array(image)
-            image = image.reshape((1, image.shape[0], image.shape[1], image.shape[2]))
-            image = preprocess_input(image)
-            y_pred = model.predict(image)
-            labels = decode_predictions(y_pred, top=1)
-            im = cv2.imread(full_path)
-            bbox, label, conf = cv.detect_common_objects(im)
-            output_image = draw_bbox(im, bbox, label, conf)
-            for i in labels[0][0]:
-                if not search(objects, labels[0][0][1]):
-                    objects.append(labels[0][0][1])
-
-            for i in label:
-                if not search(objects, i):
-                    objects.append(i)
-
-            locations.append(full_path)
-            count += 1
-            print('Done')
-        else:
-            break
-
-
 def search_object(item):
     if search(objects, item):
         temp = objects.index(item)
         temp_location = locations[temp]
-        im = cv2.imread(temp_location)
-        bbox, label, conf = cv.detect_common_objects(im)
-        output_image = draw_bbox(im, bbox, label, conf)
+        #im = cv2.imread(temp_location)
+        #bbox, label, conf = cv.detect_common_objects(im)
+        #output_image = draw_bbox(im, bbox, label, conf)
         # output_frame(output_image)
         print("The object: %s is found in this frame of the video" % item)
         # print(temp_location)
         return temp_location
+
+def feeding_frames_to_vgg16(frame_list):
+    print('feeding frames to vgg16...')
+    for item in frame_list:
+        image = load_img(item, target_size=(224, 224))
+        image = img_to_array(image)
+        image = np.expand_dims(image, axis=0)
+        image = preprocess_input(image)
+        y_pred = model.predict(image)
+        label = decode_predictions(y_pred)
+        objects.append(label[0][1][1])
+        # distinct_objects.add(label[0][1][1])
+    print('feeding completed...')
