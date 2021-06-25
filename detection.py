@@ -43,12 +43,18 @@ def video_to_images(video):
 
 
 def search(list, item):
+    print(list)
+    print(item)
     for i in range(len(list)):
         if list[i] == item:
             return True
     return False
 
 def search_object(item):
+    print(f"Item: {item}")
+    print(f"Objects: {objects}")
+
+    print(f"->{search(objects, item)}")
     if search(objects, item):
         temp = objects.index(item)
         temp_location = locations[temp]
