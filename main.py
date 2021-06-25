@@ -1,7 +1,8 @@
 import os
 from flask import Flask, flash, request, redirect, render_template
 from werkzeug.utils import secure_filename
-#from detection import *
+from object_detection  import  *
+#from object_detection import *
 #from tensorflow.keras.models import Sequential, load_model
 
 app = Flask(__name__)
@@ -41,7 +42,7 @@ def upload_form():
     return render_template('upload.html')
 
 
-@app.route('/upload_file', methods=['POST'])
+@app.route('/upload_file', methods=['GET', 'POST'])
 def upload_file():
 
     if 'files[]' not in request.files:
@@ -55,6 +56,7 @@ def upload_file():
 
             filename = secure_filename(file.filename)
             file.save(os.path.join(UPLOAD_FOLDER, filename))
+            video_to_images(os.path.join(UPLOAD_FOLDER, filename))
 
     flash('File(s) successfully uploaded')
 
@@ -64,9 +66,13 @@ def upload_file():
 
     return redirect('/')
 
-@app.route('/search_object', methods=["GET"])
-def search_object():
-    print(request.form)
+@app.route('/search_object', methods=["POST", "GET"])
+def search_objects():
+    search_text = request.form.get("name")
+    images = search_object(search_text)
+    return render_template('search.html', images=images)
+
+
 
     #Do your magic here ....
 
