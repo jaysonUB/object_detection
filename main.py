@@ -66,15 +66,20 @@ def upload_file():
 
     return redirect('/')
 
-@app.route('/search_object', methods=["POST", "GET"])
+@app.route('/search_objects', methods=["POST", "GET"])
 def search_objects():
-    search_text = request.form.get("name")
+    search_text = request.form.get("search")
+    print(f"Search Text: {search_text}")
+
     images = search_object(search_text)
+
+    print(f"->{images}")
+
     return render_template('search.html', images=images)
 
 
 
-    #Do your magic here ....
+  
 
     return "Done"
 
