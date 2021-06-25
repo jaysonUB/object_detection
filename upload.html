@@ -1,0 +1,54 @@
+<!doctype html>
+<title>Upload</title>
+
+<style>
+    .center {
+border: 5px solid #FFFF00;
+text-align: center;
+}
+</style>
+
+<header>
+    <h1>Object Detection with VGG16</h1>
+</header>
+<p>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+<ul class=flashes>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+</p>
+<div class="center">
+    <form method="POST" action="{{ url_for('upload_file') }}" enctype="multipart/form-data">
+        <dl>
+            <p>
+                <input type="file" name="files[]" multiple="true" autocomplete="off" required>
+            </p>
+        </dl>
+        <p>
+            <input type="submit" value="Submit and Analyse">
+        </p>
+
+    </form>
+
+</div>
+
+<form method="post" action="{{ url_for('search_objects') }}">
+    <p>
+        <input type="text" placeholder="Type......" name="search" id="search">
+    </p>
+    <p>
+        <input type="submit" value="Search">
+    </p>
+</form>
+
+{% if showImages %}s
+
+<img height="480", width="480", src="{{url_for('static', filename=images)}}" />
+
+
+{% endif %}
